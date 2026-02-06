@@ -3,20 +3,24 @@ import { Github } from '@vicons/fa'
 </script>
 
 <template>
-  <nav class="nav absolute top-0 h-[68px] w-[100dvw] z-50">
+  <nav class="nav absolute top-0 h-[68px] w-full z-[1]">
     <div class="px-[10dvw] py-4 h-full flex justify-between items-center">
-      <NuxtLink to="/" class="flex items-center">
-        <ElIcon size="30">
-          <NuxtImg src="/icon.svg"></NuxtImg>
-        </ElIcon>
-      </NuxtLink>
+      <nuxt-link to="/" class="flex items-center">
+        <el-icon size="30">
+          <nuxt-img src="/icon.svg"></nuxt-img>
+        </el-icon>
+      </nuxt-link>
       <div class="flex items-center gap-2">
-        <NuxtLink class="nav-btn" to="https://github.com/Redlnn/lemon-new-tab-page" target="_blank">
-          <ElIcon>
+        <nuxt-link
+          class="nav-btn"
+          to="https://github.com/Redlnn/lemon-new-tab-page"
+          target="_blank"
+        >
+          <el-icon>
             <Github />
-          </ElIcon>
-        </NuxtLink>
-        <ThemeToogle />
+          </el-icon>
+        </nuxt-link>
+        <theme-toggle />
       </div>
     </div>
   </nav>
@@ -24,6 +28,8 @@ import { Github } from '@vicons/fa'
 
 <style lang="css" scoped>
 .nav {
+  backdrop-filter: blur(10px);
+
   .nav-btn {
     width: 30px;
     height: 30px;

@@ -1,6 +1,8 @@
 @use './font.scss' as *;
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -22,4 +24,5 @@ body,
   font-size: var(--el-font-size-base);
   color: var(--el-text-color-primary);
   -webkit-overflow-scrolling: touch; // iOS 让滚动别走主线程
+  overflow: overlay;
 }

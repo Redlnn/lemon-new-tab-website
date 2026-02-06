@@ -6,9 +6,9 @@ const router = useRouter()
   <main class="flex items-center justify-center flex-col h-[100dvh]">
     <h1 class="text-9xl font-black">404</h1>
     <h2 class="text-2xl font-bold mt-6">Oops… Page Not Found</h2>
-    <ElButton class="back shadow" round size="large" type="primary" @click="router.back()">
+    <el-button class="back shadow" round size="large" type="primary" @click="router.back()">
       Back
-    </ElButton>
+    </el-button>
   </main>
 </template>
 

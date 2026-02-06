@@ -24,13 +24,13 @@ function toggleTheme() {
 
 <template>
   <button class="nav-btn" @click="toggleTheme">
-    <ElIcon>
+    <el-icon>
       <template v-if="isDark">
-        <DarkModeOutlined />
+        <dark-mode-outlined />
       </template>
       <template v-else>
-        <LightModeOutlined />
+        <light-mode-outlined />
       </template>
-    </ElIcon>
+    </el-icon>
   </button>
 </template>

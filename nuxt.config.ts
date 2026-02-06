@@ -80,7 +80,7 @@ export default defineNuxtConfig({
   },
 
   elementPlus: {
-    icon: 'ElIcon',
+    icon: 'el-icon',
     importStyle: 'scss',
     themes: ['dark'],
     defaultLocale: 'zh-cn'

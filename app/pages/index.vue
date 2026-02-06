@@ -67,7 +67,7 @@ function install(browser: StoreBrowser) {
         <el-dropdown size="large" type="primary" class="hero-btn" popper-class="hero-btn-popper">
           <el-button round size="large" type="primary" dark class="btn" @click="installAuto">
             立即安装
-            <el-icon class="el-icon--right"><CaretDown24Filled /></el-icon>
+            <el-icon class="el-icon--right"><caret-down24-filled /></el-icon>
           </el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -90,7 +90,7 @@ function install(browser: StoreBrowser) {
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <p class="hero-compatibility">Chrome / Edge 116+ | Firefox 128+</p>
+        <div class="hero-compatibility">Chrome / Edge 116+ | Firefox 128+</div>
       </div>
     </section>
 
@@ -103,14 +103,14 @@ function install(browser: StoreBrowser) {
             绝大部分功能纯本地+缓存，无过多网络负担。打开新标签页，秒速呈现。
           </p>
         </div>
-        <NuxtImg src="/1.webp" class="media-card" />
+        <nuxt-img src="/1.webp" class="media-card" />
       </div>
     </section>
 
     <!-- 屏 2 — 最常访问 -->
     <section class="section section-dark">
       <div class="container grid-2 fade-up">
-        <NuxtImg src="/2.webp" class="media-card" />
+        <nuxt-img src="/2.webp" class="media-card" />
         <div>
           <h3 class="section-title">常用的，自然在眼前</h3>
           <p class="section-text">
@@ -127,7 +127,7 @@ function install(browser: StoreBrowser) {
         <p class="section-text">
           根据你的偏好调整布局与视觉风格，让界面以更自然的方式融入你的浏览节奏。
         </p>
-        <NuxtImg src="/3.webp" class="media-card large" />
+        <nuxt-img src="/3.webp" class="media-card large" />
       </div>
     </section>
 
@@ -140,7 +140,7 @@ function install(browser: StoreBrowser) {
             基于壁纸的莫奈动态取色系统<sup>1</sup>。每一次打开，都是全新的氛围<sup>2</sup>。
           </p>
         </div>
-        <NuxtImg src="/4.webp" class="media-card" />
+        <nuxt-img src="/4.webp" class="media-card" />
         <div class="session-note">
           <ol>
             <li>注1：不支持视频壁纸及纯色背景</li>
@@ -166,13 +166,11 @@ function install(browser: StoreBrowser) {
     <section class="section section-dark center">
       <div class="fade-up">
         <h3 class="section-title xl">让新标签页，回归简洁</h3>
-        <NuxtLink to="#">
-          <ElButton round size="large" type="primary" dark class="btn"> 立即安装 </ElButton>
-        </NuxtLink>
+        <nuxt-link to="#">
+          <el-button round size="large" type="primary" dark class="btn"> 立即安装 </el-button>
+        </nuxt-link>
       </div>
     </section>
-
-    <ElBacktop></ElBacktop>
   </main>
 </template>
 
@@ -274,16 +272,7 @@ function install(browser: StoreBrowser) {
   margin-top: 1em;
   color: var(--el-text-color-placeholder);
   font-size: var(--el-font-size-extra-small);
-  transform: translateY(5px);
-  transition:
-    opacity var(--el-transition-duration-fast) ease,
-    transform var(--el-transition-duration-fast) ease;
 }
-
-/* .hero-btn:hover + .hero-compatibility {
-  opacity: 1;
-  transform: translateY(0);
-} */
 
 .section-title {
   font-size: clamp(36px, 4vw, 48px);
