@@ -1,0 +1,25 @@
+@use './font.scss' as *;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--el-bg-color);
+  text-rendering: optimizeLegibility;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-autospace: normal;
+}
+
+html,
+body,
+#__nuxt {
+  margin: 0;
+  font-family: var(--el-font-family);
+  font-size: var(--el-font-size-base);
+  color: var(--el-text-color-primary);
+  -webkit-overflow-scrolling: touch; // iOS 让滚动别走主线程
+}
