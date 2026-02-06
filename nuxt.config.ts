@@ -59,6 +59,9 @@ export default defineNuxtConfig({
   compatibilityDate: 'latest',
 
   nitro: {
+    prerender: {
+      autoSubfolderIndex: false
+    },
     esbuild: {
       options: {
         target: 'esnext'
