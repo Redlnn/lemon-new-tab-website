@@ -20,6 +20,24 @@ type StoreBrowser = keyof typeof storeUrlMap // "chrome" | "edge" | "firefox" | 
 function detectBrowser() {
   const ua = navigator.userAgent.toLowerCase()
 
+  // iOS
+  if (
+    /ipad|iphone|ipod/.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  ) {
+    return 'iOS'
+  }
+
+  // Harmony
+  if (/OpenHarmony/i.test(ua)) {
+    return 'HarmonyOS Next'
+  }
+
+  // Android
+  if (/Android/.test(ua)) {
+    return 'Android'
+  }
+
   // Firefox 先判断（它不属于 chromium）
   if (ua.includes('firefox')) return 'firefox'
 
@@ -41,12 +59,23 @@ function detectBrowser() {
 
 function installAuto() {
   const browser = detectBrowser()
+  console.log(browser)
+  if (['iOS', 'Android', 'HarmonyOS Next'].includes(browser)) {
+    ElMessageBox.confirm('不支持移动设备安装，将跳转到 Github', '不受支持的设备', {
+      type: 'warning'
+    }).then(() => install('github'))
+    return
+  }
   install(browser as StoreBrowser)
 }
 
 function install(browser: StoreBrowser) {
   const url = storeUrlMap[browser] ?? storeUrlMap.chrome
   window.open(url, '_black')
+}
+
+function scrollToTop() {
+  window.scrollTo(0, 0)
 }
 </script>
 
@@ -166,9 +195,9 @@ function install(browser: StoreBrowser) {
     <section class="section section-dark center">
       <div class="fade-up">
         <h3 class="section-title xl">让新标签页，回归简洁</h3>
-        <nuxt-link to="#">
-          <el-button round size="large" type="primary" dark class="btn"> 立即安装 </el-button>
-        </nuxt-link>
+        <el-button round size="large" type="primary" dark class="btn" @click="scrollToTop">
+          立即安装
+        </el-button>
       </div>
     </section>
   </main>
