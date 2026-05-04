@@ -1,5 +1,6 @@
 @use './font.scss' as *;
 @use './element.scss' as *;
+@use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;
 
 *,
 *::before,
@@ -19,11 +20,22 @@ html {
 
 html,
 body,
-#__nuxt {
+#app {
   margin: 0;
   font-family: var(--el-font-family);
   font-size: var(--el-font-size-base);
   color: var(--el-text-color-primary);
   -webkit-overflow-scrolling: touch; // iOS 让滚动别走主线程
   overflow: overlay;
+  text-underline-offset: 0.25em;
+}
+
+.md-container {
+  max-width: min(90%, 1000px);
+  margin: 0 auto;
+  padding: 60px 0 200px;
+}
+
+html:has(.md-container) {
+  background: linear-gradient(to bottom, var(--el-color-primary-light-9), var(--el-bg-color-page));
 }

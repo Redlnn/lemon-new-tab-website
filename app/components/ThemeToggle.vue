@@ -1,23 +1,18 @@
 <script lang="ts" setup>
 import { DarkModeOutlined, LightModeOutlined } from '@vicons/material'
+import { useDark } from '@vueuse/core'
 
-const color = useColorMode()
-
-const isDark = computed(() => color.value === 'dark')
+const isDark = useDark()
 
 function toggleDark() {
-  color.preference = isDark.value ? 'light' : 'dark'
+  isDark.value = !isDark.value
 }
 
-// 主题切换函数
 function toggleTheme() {
-  // 兼容性处理：如果浏览器不支持 View Transitions API，则直接切换主题
   if (!document.startViewTransition) {
     toggleDark()
     return
   }
-
-  // 使用 View Transitions API 创建过渡效果
   document.startViewTransition.bind(document)(toggleDark)
 }
 </script>

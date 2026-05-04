@@ -1,3 +1,5 @@
+import { useWindowScroll } from '@vueuse/core'
+
 interface Options {
   selector?: string
   enter?: number
