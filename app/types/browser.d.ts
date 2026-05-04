@@ -6,7 +6,7 @@ interface NavigatorUADataBrand {
 interface NavigatorUAData {
   brands: NavigatorUADataBrand[]
   mobile: boolean
-  getHighEntropyValues?: (hints: string[]) => Promise<Record<string, any>>
+  getHighEntropyValues?: (hints: string[]) => Promise<Record<string, unknown>>
 }
 
 interface Navigator {

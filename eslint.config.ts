@@ -1,24 +1,27 @@
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import skipFormatting from 'eslint-config-prettier/flat'
 import pluginOxlint from 'eslint-plugin-oxlint'
 import pluginVue from 'eslint-plugin-vue'
-
-import { defineFlatConfigs } from '@nuxt/eslint-config'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
-import { vueTsConfigs } from '@vue/eslint-config-typescript'
+import { globalIgnores } from 'eslint/config'
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
 // configureVueProject({ scriptLangs: ['ts', 'tsx'] })
 // More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 
-// https://eslint.nuxt.com/packages/module
-export default defineFlatConfigs(
+export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue,js,cjs,mjs,jsx}']
+    files: ['**/*.{ts,mts,tsx,vue,js,cjs,mjs,jsx}'],
   },
 
-  pluginVue.configs['flat/essential'],
+  globalIgnores(['**/.output/*', '**/dist/*', '**/node_modules/*']),
+
+  ...pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
+
+  ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
+
   {
     name: 'app/overrides',
     rules: {
@@ -27,16 +30,16 @@ export default defineFlatConfigs(
       'prefer-const': 'error',
       'prefer-rest-params': 'error',
       'prefer-spread': 'error',
-      'vue/multi-word-component-names': 'off'
-    }
+      'vue/multi-word-component-names': 'off',
+    },
   },
   {
     name: 'app/overrides-js',
     files: ['**/*.js', '**/*.cjs', '**/*.mjs', '**/*.cjx'],
     rules: {
-      '@typescript-eslint/no-var-requires': 'off'
-    }
+      '@typescript-eslint/no-var-requires': 'warn',
+    },
   },
-  ...pluginOxlint.configs['flat/recommended'],
-  skipFormatting
+
+  skipFormatting,
 )

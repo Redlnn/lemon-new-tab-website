@@ -5,14 +5,14 @@ import { CaretDown24Filled } from '@vicons/fluent'
 const mainRef = useTemplateRef('mainRef')
 
 useScrollMotion(mainRef, {
-  selector: '.fade-up'
+  selector: '.fade-up',
 })
 
 const storeUrlMap = {
   chrome: 'https://chromewebstore.google.com/detail/bhbpmpflnpnkjanfgbjjhldccbckjohb',
   edge: 'https://microsoftedge.microsoft.com/addons/detail/keikkgfgidagjlicckkangkfgnbdjdnh',
   firefox: 'https://addons.mozilla.org/firefox/addon/lemon-new-tab/',
-  github: 'https://github.com/Redlnn/lemon-new-tab-page/releases/latest'
+  github: 'https://github.com/Redlnn/lemon-new-tab-page/releases/latest',
 } as const
 
 type StoreBrowser = keyof typeof storeUrlMap // "chrome" | "edge" | "firefox" | "github"
@@ -62,7 +62,7 @@ function installAuto() {
   console.log(browser)
   if (['iOS', 'Android', 'HarmonyOS Next'].includes(browser)) {
     ElMessageBox.confirm('不支持移动设备安装，将跳转到 Github', '不受支持的设备', {
-      type: 'warning'
+      type: 'warning',
     }).then(() => install('github'))
     return
   }

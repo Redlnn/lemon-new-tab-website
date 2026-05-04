@@ -61,8 +61,8 @@ export function useScrollMotion(containerRef: Ref<HTMLElement | null>, options: 
         })
       },
       {
-        threshold: [0, leave, enter, 1]
-      }
+        threshold: [0, leave, enter, 1],
+      },
     )
 
     elements.forEach((el) => observer.observe(el))

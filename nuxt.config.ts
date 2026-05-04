@@ -9,11 +9,11 @@ export default defineNuxtConfig({
     '@element-plus/nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/image',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
   ],
 
   devtools: {
-    enabled: false
+    enabled: false,
   },
 
   app: {
@@ -23,11 +23,11 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           name: 'description',
-          content: '一个真正「好看且开源」的浏览器起始页'
-        }
+          content: '一个真正「好看且开源」的浏览器起始页',
+        },
       ],
-      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/icon.svg' }]
-    }
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/icon.svg' }],
+    },
   },
 
   // css
@@ -35,16 +35,16 @@ export default defineNuxtConfig({
 
   // vueuse
   vueuse: {
-    ssrHandlers: true
+    ssrHandlers: true,
   },
 
   // colorMode
   colorMode: {
-    classSuffix: ''
+    classSuffix: '',
   },
 
   future: {
-    compatibilityVersion: 4
+    compatibilityVersion: 4,
   },
 
   experimental: {
@@ -53,46 +53,46 @@ export default defineNuxtConfig({
     payloadExtraction: true,
     renderJsonPayloads: true,
     typedPages: true,
-    viewTransition: true
+    viewTransition: true,
   },
 
   compatibilityDate: 'latest',
 
   nitro: {
     prerender: {
-      autoSubfolderIndex: false
+      autoSubfolderIndex: false,
     },
     esbuild: {
       options: {
-        target: 'esnext'
-      }
-    }
+        target: 'esnext',
+      },
+    },
   },
 
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/assets/scss/element/index.scss" as element;`
-        }
-      }
-    }
+          additionalData: `@use "@/assets/scss/element/index.scss" as element;`,
+        },
+      },
+    },
   },
 
   elementPlus: {
     icon: 'el-icon',
     importStyle: 'scss',
     themes: ['dark'],
-    defaultLocale: 'zh-cn'
+    defaultLocale: 'zh-cn',
   },
 
   tailwindcss: {
     config: {
       theme: {
         fontFamily: {
-          sans: []
-        }
-      }
-    }
-  }
+          sans: [],
+        },
+      },
+    },
+  },
 })
