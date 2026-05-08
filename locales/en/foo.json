@@ -1,46 +1,46 @@
 {
-  "title": {
-    "index": "Lemon New Tab - Make Your New Tab Better",
-    "tos": "Terms of Service - Lemon New Tab",
-    "privacy": "Privacy Policy - Lemon New Tab",
-    "notfound": "Page Not Found - Lemon New Tab"
-  },
-  "tos": "Terms of Service",
-  "privacy": "Privacy Policy",
   "index": {
-    "heroName": "Lemon",
+    "ctaTitle": "Bring Simplicity Back to Your New Tab",
+    "favorites": {
+      "text": "See your most-visited sites at a glance. Add your own shortcuts and start every browsing session with ease.",
+      "title": "Your Favorites, Always in View"
+    },
+    "heroName": "Lemon ",
+    "heroSubtitle": "Minimalist · Open Source · Customizable{br}A beautiful, open-source browser new tab page",
     "heroTagline": "New Tab",
     "heroTitle": "Redefine Your{br}New Tab Page",
-    "heroSubtitle": "Minimalist · Open Source · Customizable{br}A beautiful, open-source browser new tab page",
+    "i18n": {
+      "text": "Supports Simplified Chinese · Traditional Chinese (HK/TW) · English{br}Localized for regional conventions, not machine translation",
+      "title": "Built for Multiple Languages"
+    },
     "installBtn": "Install Now",
     "mobileWarning": "Mobile devices are not supported. You will be redirected to GitHub.",
     "mobileWarningTitle": "Unsupported Device",
-    "speed": {
-      "title": "Blazing Fast",
-      "text": "Most features run locally with caching — minimal network overhead. Open a new tab and it loads instantly."
+    "monet": {
+      "note1": "Note 1: Not supported for video wallpapers or solid-color backgrounds",
+      "note2": "Note 2: Theme color only updates on open when using an online API with a rotating wallpaper",
+      "text": "Monet-inspired dynamic color extraction from your wallpaper{sup1}. A fresh ambiance with every open{sup2}.",
+      "title": "An Interface That Breathes"
     },
-    "favorites": {
-      "title": "Your Favorites, Always in View",
-      "text": "See your most-visited sites at a glance. Add your own shortcuts and start every browsing session with ease."
+    "speed": {
+      "text": "Most features run locally with caching — minimal network overhead. Open a new tab and it loads instantly.",
+      "title": "Blazing Fast"
     },
     "themes": {
-      "title": "More Than One Look",
-      "text": "Customize the layout and visual style to your liking — seamlessly fitting into your browsing routine."
-    },
-    "monet": {
-      "title": "An Interface That Breathes",
-      "text": "Monet-inspired dynamic color extraction from your wallpaper{sup1}. A fresh ambiance with every open{sup2}.",
-      "note1": "Note 1: Not supported for video wallpapers or solid-color backgrounds",
-      "note2": "Note 2: Theme color only updates on open when using an online API with a rotating wallpaper"
-    },
-    "i18n": {
-      "title": "Built for Multiple Languages",
-      "text": "Supports Simplified Chinese · Traditional Chinese (HK/TW) · English{br}Localized for regional conventions, not machine translation"
-    },
-    "ctaTitle": "Bring Simplicity Back to Your New Tab"
+      "text": "Customize the layout and visual style to your liking — seamlessly fitting into your browsing routine.",
+      "title": "More Than One Look"
+    }
   },
   "notFound": {
-    "title": "Oops… Page Not Found",
-    "back": "Back"
-  }
+    "back": "Back",
+    "title": "Oops… Page Not Found"
+  },
+  "privacy": "Privacy Policy",
+  "title": {
+    "index": "Lemon New Tab - Make Your New Tab Better",
+    "notfound": "Page Not Found - Lemon New Tab",
+    "privacy": "Privacy Policy - Lemon New Tab",
+    "tos": "Terms of Service - Lemon New Tab"
+  },
+  "tos": "Terms of Service"
 }

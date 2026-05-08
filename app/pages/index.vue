@@ -3,12 +3,15 @@ import { useHead } from '@unhead/vue'
 import { Chrome, Edge, FirefoxBrowser, Github } from '@vicons/fa'
 import { CaretDown24Filled } from '@vicons/fluent'
 import { useTranslation } from 'i18next-vue'
+import { useRoute } from 'vue-router'
 
 import ClientOnly from '@/components/ClientOnly.vue'
 import { useI18nHead } from '@/composables/useI18nHead'
 import { useScrollMotion } from '@/composables/useScrollMotion'
 
 const { t } = useTranslation()
+const route = useRoute()
+const currentLang = computed(() => route.params.lang as string)
 
 useHead({ title: computed(() => t('title.index')) })
 useI18nHead()
@@ -109,7 +112,7 @@ function scrollToTop() {
           </i18next>
         </p>
         <client-only>
-          <el-dropdown size="large" type="primary" class="hero-btn" popper-class="hero-btn-popper">
+          <el-dropdown :key="currentLang" size="large" type="primary" class="hero-btn" popper-class="hero-btn-popper">
             <el-button round size="large" type="primary" dark class="btn" @click="installAuto">
               {{ t('index.installBtn') }}
               <el-icon class="el-icon--right"><caret-down24-filled /></el-icon>
@@ -247,7 +250,7 @@ function scrollToTop() {
     <section class="section section-dark center">
       <div class="fade-up">
         <h3 class="section-title">{{ t('index.ctaTitle') }}</h3>
-        <el-button round size="large" type="primary" dark class="btn" @click="scrollToTop">
+        <el-button :key="currentLang" round size="large" type="primary" dark class="btn" @click="scrollToTop">
           {{ t('index.installBtn') }}
         </el-button>
       </div>
