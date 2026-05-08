@@ -3,6 +3,7 @@ import { useWindowSize } from '@vueuse/core'
 
 import { useRoute } from 'vue-router'
 
+import ClientOnly from '@/components/ClientOnly.vue'
 import GlobalNav from '@/components/GlobalNav.vue'
 
 const route = useRoute()
@@ -20,7 +21,9 @@ function handleScroll({ scrollTop }: { scrollTop: number }) {
     <el-scrollbar ref="scrollbar" @scroll="handleScroll">
       <router-view />
     </el-scrollbar>
-    <el-backtop target=".main-container .el-scrollbar__wrap"></el-backtop>
+    <client-only>
+      <el-backtop target=".main-container .el-scrollbar__wrap"></el-backtop>
+    </client-only>
   </div>
 </template>
 

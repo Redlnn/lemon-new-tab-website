@@ -15,7 +15,13 @@ export default defineConfigWithVueTs(
     files: ['**/*.{ts,mts,tsx,vue,js,cjs,mjs,jsx}'],
   },
 
-  globalIgnores(['**/.output/*', '**/dist/*', '**/node_modules/*', '**/auto-imports.d.ts', '**/components.d.ts']),
+  globalIgnores([
+    '**/.output/*',
+    '**/dist/*',
+    '**/node_modules/*',
+    '**/auto-imports.d.ts',
+    '**/components.d.ts',
+  ]),
 
   ...pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,

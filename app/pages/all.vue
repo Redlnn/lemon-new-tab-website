@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { useTranslation } from 'i18next-vue'
 import { useRouter } from 'vue-router'
 
 const { t } = useTranslation()
 const router = useRouter()
+
+useHead({ title: computed(() => t('title.notfound')) })
 </script>
 
 <template>

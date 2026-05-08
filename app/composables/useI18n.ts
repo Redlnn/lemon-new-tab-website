@@ -1,39 +1,53 @@
 import type { App } from 'vue'
 
-import i18next from 'i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
+import i18next, { type InitOptions } from 'i18next'
 import I18NextVue from 'i18next-vue'
 import resources from 'virtual:i18next-loader'
 
 export const getLang = () => i18next.language
 
 function changeDocument() {
-  document.documentElement.lang = i18next.language
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = i18next.language
+  }
 }
 
-export async function initI18n() {
-  // 检测用户语言
-  // 参考: https://github.com/i18next/i18next-browser-languageDetector
-  await i18next.use(LanguageDetector).init({
-    resources,
-    fallbackLng: {
-      zh: ['zh-CN'],
-      default: ['en'],
-    },
-    load: 'currentOnly',
-    nonExplicitSupportedLngs: true,
-    ns: ['foo'],
-    defaultNS: 'foo',
-    debug: import.meta.env.DEV,
-    interpolation: {
-      escapeValue: false,
-    },
-  })
+const i18nOptions: InitOptions = {
+  resources,
+
+  fallbackLng: {
+    zh: ['zh-CN'],
+    default: ['en'],
+  },
+
+  load: 'currentOnly',
+  nonExplicitSupportedLngs: true,
+
+  ns: ['foo'],
+  defaultNS: 'foo',
+
+  debug: import.meta.env.DEV,
+
+  interpolation: {
+    escapeValue: false,
+  },
+}
+
+export async function initI18n(lang: string = 'en') {
+  if (i18next.isInitialized) {
+    if (lang !== i18next.language) {
+      await i18next.changeLanguage(lang)
+    }
+    changeDocument()
+    return
+  }
+
+  await i18next.init({ ...i18nOptions, lng: lang })
 
   changeDocument()
 
-  i18next.off('languageChanged') // 避免重复绑定事件
-  i18next.on('languageChanged', changeDocument) // 同步 UI：当语言变化时，更新 <html lang> 与标题
+  i18next.off('languageChanged')
+  i18next.on('languageChanged', changeDocument)
 }
 
 export function i18n<T extends App>(app: T) {

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { DarkModeOutlined, LightModeOutlined } from '@vicons/material'
 import { useDark } from '@vueuse/core'
+
+import { DarkModeOutlined, LightModeOutlined } from '@vicons/material'
 
 const isDark = useDark()
 

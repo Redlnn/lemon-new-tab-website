@@ -1,14 +1,12 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": [
-    "app/**/*",
-  ],
+  "include": ["app/**/*"],
   "exclude": [".output", "dist"],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
     "paths": {
-      "@/*": ["./app/*"],
+      "@/*": ["./app/*"]
     },
     "jsx": "preserve",
     "jsxImportSource": "vue"

@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { Github, Language } from '@vicons/fa'
 import { useTranslation } from 'i18next-vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import ThemeToggle from '@/components/ThemeToggle.vue'
+import { DEFAULT_LANG } from '@/routes'
 
-const { t, i18next } = useTranslation()
+const { t } = useTranslation()
+const route = useRoute()
+const router = useRouter()
 
 const props = withDefaults(
   defineProps<{
@@ -14,23 +18,28 @@ const props = withDefaults(
     showBg: false,
   },
 )
+
+const currentLang = computed(() => (route.params.lang as string) || DEFAULT_LANG)
+
+async function switchLang() {
+  const nextLang = currentLang.value === 'zh-CN' ? 'en' : 'zh-CN'
+  const newPath = route.path.replace(`/${currentLang.value}`, `/${nextLang}`)
+  router.push(newPath || `/${nextLang}`)
+}
 </script>
 
 <template>
   <nav class="nav" :class="{ 'bg-visible': props.showBg }">
     <div class="px-[10dvw] py-4 h-full flex justify-between items-center">
-      <RouterLink to="/" class="flex items-center">
+      <RouterLink :to="`/${currentLang}`" class="flex items-center">
         <el-icon size="30">
-          <img src="/icon.svg" />
+          <img src="/icon.svg" alt="柠檬起始页" />
         </el-icon>
       </RouterLink>
       <div class="flex items-center gap-3">
-        <RouterLink to="/tos" class="nav-btn">{{ t('tos') }}</RouterLink>
-        <RouterLink to="/privacy" class="nav-btn">{{ t('privacy') }}</RouterLink>
-        <button
-          class="nav-btn"
-          @click="i18next.changeLanguage(i18next.language === 'en' ? 'zh-CN' : 'en')"
-        >
+        <RouterLink :to="`/${currentLang}/tos`" class="nav-btn">{{ t('tos') }}</RouterLink>
+        <RouterLink :to="`/${currentLang}/privacy`" class="nav-btn">{{ t('privacy') }}</RouterLink>
+        <button class="nav-btn" @click="switchLang">
           <el-icon>
             <Language />
           </el-icon>

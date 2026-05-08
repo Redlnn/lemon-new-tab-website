@@ -2,6 +2,8 @@ auto-imports.d.ts
 components.d.ts
 .env.*
 
+.vite-ssg-temp
+
 # Logs
 logs
 *.log

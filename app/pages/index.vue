@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import { useHead } from '@unhead/vue'
 import { Chrome, Edge, FirefoxBrowser, Github } from '@vicons/fa'
 import { CaretDown24Filled } from '@vicons/fluent'
 import { useTranslation } from 'i18next-vue'
 
+import ClientOnly from '@/components/ClientOnly.vue'
+import { useI18nHead } from '@/composables/useI18nHead'
 import { useScrollMotion } from '@/composables/useScrollMotion'
 
 const { t } = useTranslation()
+
+useHead({ title: computed(() => t('title.index')) })
+useI18nHead()
 
 const mainRef = useTemplateRef('mainRef')
 
@@ -76,7 +82,7 @@ function installAuto() {
 
 function install(browser: StoreBrowser) {
   const url = storeUrlMap[browser] ?? storeUrlMap.chrome
-  window.open(url, '_black')
+  window.open(url, '_blank')
 }
 
 function scrollToTop() {
@@ -102,32 +108,72 @@ function scrollToTop() {
             <template #br><br /></template>
           </i18next>
         </p>
-        <el-dropdown size="large" type="primary" class="hero-btn" popper-class="hero-btn-popper">
-          <el-button round size="large" type="primary" dark class="btn" @click="installAuto">
-            {{ t('index.installBtn') }}
-            <el-icon class="el-icon--right"><caret-down24-filled /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="install('chrome')">
-                <el-icon><Chrome /></el-icon>
-                Chrome
-              </el-dropdown-item>
-              <el-dropdown-item @click="install('edge')">
-                <el-icon><Edge /></el-icon>
-                Microsoft Edge
-              </el-dropdown-item>
-              <el-dropdown-item @click="install('firefox')">
-                <el-icon><FirefoxBrowser /></el-icon>
-                Firefox
-              </el-dropdown-item>
-              <el-dropdown-item @click="install('github')">
-                <el-icon><Github /></el-icon>
-                GitHub
-              </el-dropdown-item>
-            </el-dropdown-menu>
+        <client-only>
+          <el-dropdown size="large" type="primary" class="hero-btn" popper-class="hero-btn-popper">
+            <el-button round size="large" type="primary" dark class="btn" @click="installAuto">
+              {{ t('index.installBtn') }}
+              <el-icon class="el-icon--right"><caret-down24-filled /></el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>
+                  <a
+                    :href="storeUrlMap.chrome"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="store-link"
+                  >
+                    <el-icon><Chrome /></el-icon>
+                    Chrome
+                  </a>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <a
+                    :href="storeUrlMap.edge"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="store-link"
+                  >
+                    <el-icon><Edge /></el-icon>
+                    Microsoft Edge
+                  </a>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <a
+                    :href="storeUrlMap.firefox"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="store-link"
+                  >
+                    <el-icon><FirefoxBrowser /></el-icon>
+                    Firefox
+                  </a>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <a
+                    :href="storeUrlMap.github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="store-link"
+                  >
+                    <el-icon><Github /></el-icon>
+                    GitHub
+                  </a>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <template #placeholder>
+            <a
+              :href="storeUrlMap.chrome"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="el-button el-button--primary el-button--large is-round btn hero-btn"
+            >
+              {{ t('index.installBtn') }}
+            </a>
           </template>
-        </el-dropdown>
+        </client-only>
         <div class="hero-compatibility">Chrome / Edge 116+ | Firefox 128+</div>
       </div>
     </section>
@@ -139,14 +185,14 @@ function scrollToTop() {
           <h3 class="section-title">{{ t('index.speed.title') }}</h3>
           <p class="section-text">{{ t('index.speed.text') }}</p>
         </div>
-        <img src="/1.webp" class="media-card" />
+        <img src="/1.webp" class="media-card" :alt="t('index.speed.title')" />
       </div>
     </section>
 
     <!-- 屏 2 — 最常访问 -->
     <section class="section section-dark">
       <div class="container grid-2 fade-up">
-        <img src="/2.webp" class="media-card" />
+        <img src="/2.webp" class="media-card" :alt="t('index.favorites.title')" />
         <div>
           <h3 class="section-title">{{ t('index.favorites.title') }}</h3>
           <p class="section-text">{{ t('index.favorites.text') }}</p>
@@ -159,7 +205,7 @@ function scrollToTop() {
       <div class="container center narrow fade-up">
         <h3 class="section-title">{{ t('index.themes.title') }}</h3>
         <p class="section-text">{{ t('index.themes.text') }}</p>
-        <img src="/3.webp" class="media-card large" />
+        <img src="/3.webp" class="media-card large" :alt="t('index.themes.title')" />
       </div>
     </section>
 
@@ -175,7 +221,7 @@ function scrollToTop() {
             </i18next>
           </p>
         </div>
-        <img src="/4.webp" class="media-card" />
+        <img src="/4.webp" class="media-card" :alt="t('index.monet.title')" />
         <div class="session-note">
           <ol>
             <li>{{ t('index.monet.note1') }}</li>
@@ -406,11 +452,26 @@ function scrollToTop() {
   }
 
   .el-dropdown-menu__item {
+    padding: 0;
     border-radius: 10px;
+  }
+
+  .store-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 16px;
+    color: inherit;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
 .btn.el-button--large.is-round {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 600;
   font-size: 18px;
   height: 50px;
