@@ -38,9 +38,8 @@ const router = createRouter({
 })
 const { start, done } = useNProgress()
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(() => {
   start()
-  next()
 })
 
 router.onError(() => {

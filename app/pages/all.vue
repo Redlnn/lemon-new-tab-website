@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import { useTranslation } from 'i18next-vue'
 import { useRouter } from 'vue-router'
 
+const { t } = useTranslation()
 const router = useRouter()
 </script>
 
 <template>
   <main class="not-found flex items-center justify-center flex-col h-[100dvh]">
     <h1 class="text-9xl font-black">404</h1>
-    <h2 class="text-2xl font-bold mt-6">Oops… Page Not Found</h2>
+    <h2 class="text-2xl font-bold mt-6">{{ t('notFound.title') }}</h2>
     <el-button class="back shadow" round size="large" type="primary" @click="router.back()">
-      Back
+      {{ t('notFound.back') }}
     </el-button>
   </main>
 </template>

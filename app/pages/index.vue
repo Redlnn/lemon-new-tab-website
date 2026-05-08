@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { Chrome, Edge, FirefoxBrowser, Github } from '@vicons/fa'
 import { CaretDown24Filled } from '@vicons/fluent'
+import { useTranslation } from 'i18next-vue'
 
 import { useScrollMotion } from '@/composables/useScrollMotion'
+
+const { t } = useTranslation()
 
 const mainRef = useTemplateRef('mainRef')
 
@@ -63,7 +66,7 @@ function installAuto() {
   const browser = detectBrowser()
   console.log(browser)
   if (['iOS', 'Android', 'HarmonyOS Next'].includes(browser)) {
-    ElMessageBox.confirm('不支持移动设备安装，将跳转到 Github', '不受支持的设备', {
+    ElMessageBox.confirm(t('index.mobileWarning'), t('index.mobileWarningTitle'), {
       type: 'warning',
     }).then(() => install('github'))
     return
@@ -86,18 +89,22 @@ function scrollToTop() {
     <section class="section section-full gradient-hero">
       <div class="container hero fade-up">
         <h2 class="hero-title">
-          <span class="name">柠檬</span>
-          <span>起始页</span>
+          <span class="name">{{ t('index.heroName') }}</span>
+          <span>{{ t('index.heroTagline') }}</span>
         </h2>
-        <h2 class="hero-title">重新定义你的<br />新标签页</h2>
+        <h2 class="hero-title">
+          <i18next :translation="t('index.heroTitle')">
+            <template #br><br /></template>
+          </i18next>
+        </h2>
         <p class="hero-subtitle">
-          极简 · 开源 · 可定制
-          <br />
-          一个真正「好看且开源」的浏览器起始页
+          <i18next :translation="t('index.heroSubtitle')">
+            <template #br><br /></template>
+          </i18next>
         </p>
         <el-dropdown size="large" type="primary" class="hero-btn" popper-class="hero-btn-popper">
           <el-button round size="large" type="primary" dark class="btn" @click="installAuto">
-            立即安装
+            {{ t('index.installBtn') }}
             <el-icon class="el-icon--right"><caret-down24-filled /></el-icon>
           </el-button>
           <template #dropdown>
@@ -114,7 +121,7 @@ function scrollToTop() {
                 <el-icon><FirefoxBrowser /></el-icon>
                 Firefox
               </el-dropdown-item>
-              <el-dropdown-item @click="install('firefox')">
+              <el-dropdown-item @click="install('github')">
                 <el-icon><Github /></el-icon>
                 GitHub
               </el-dropdown-item>
@@ -129,10 +136,8 @@ function scrollToTop() {
     <section class="section section-light">
       <div class="container grid-2 fade-up">
         <div>
-          <h3 class="section-title">快到不像话</h3>
-          <p class="section-text">
-            绝大部分功能纯本地+缓存，无过多网络负担。打开新标签页，秒速呈现。
-          </p>
+          <h3 class="section-title">{{ t('index.speed.title') }}</h3>
+          <p class="section-text">{{ t('index.speed.text') }}</p>
         </div>
         <img src="/1.webp" class="media-card" />
       </div>
@@ -143,10 +148,8 @@ function scrollToTop() {
       <div class="container grid-2 fade-up">
         <img src="/2.webp" class="media-card" />
         <div>
-          <h3 class="section-title">常用的，自然在眼前</h3>
-          <p class="section-text">
-            为你呈现最常访问网站，添加个人常用链接，让每一次开始都更高效、更从容。
-          </p>
+          <h3 class="section-title">{{ t('index.favorites.title') }}</h3>
+          <p class="section-text">{{ t('index.favorites.text') }}</p>
         </div>
       </div>
     </section>
@@ -154,10 +157,8 @@ function scrollToTop() {
     <!-- 屏 3 — 壁纸能力 -->
     <section class="section gradient-soft">
       <div class="container center narrow fade-up">
-        <h3 class="section-title">不止一种样子</h3>
-        <p class="section-text">
-          根据你的偏好调整布局与视觉风格，让界面以更自然的方式融入你的浏览节奏。
-        </p>
+        <h3 class="section-title">{{ t('index.themes.title') }}</h3>
+        <p class="section-text">{{ t('index.themes.text') }}</p>
         <img src="/3.webp" class="media-card large" />
       </div>
     </section>
@@ -166,16 +167,19 @@ function scrollToTop() {
     <section class="section section-light">
       <div class="container grid-2 fade-up">
         <div>
-          <h3 class="section-title">界面，会呼吸</h3>
+          <h3 class="section-title">{{ t('index.monet.title') }}</h3>
           <p class="section-text">
-            基于壁纸的莫奈动态取色系统<sup>1</sup>。每一次打开，都是全新的氛围<sup>2</sup>。
+            <i18next :translation="t('index.monet.text')">
+              <template #sup1><sup>1</sup></template>
+              <template #sup2><sup>2</sup></template>
+            </i18next>
           </p>
         </div>
         <img src="/4.webp" class="media-card" />
         <div class="session-note">
           <ol>
-            <li>注1：不支持视频壁纸及纯色背景</li>
-            <li>注2：只有使用在线 API 时才会每次打开跟随壁纸切换而改变主题色</li>
+            <li>{{ t('index.monet.note1') }}</li>
+            <li>{{ t('index.monet.note2') }}</li>
           </ol>
         </div>
       </div>
@@ -184,11 +188,11 @@ function scrollToTop() {
     <!-- 屏 5 — 国际化 -->
     <section class="section section-muted">
       <div class="container center narrow fade-up">
-        <h3 class="section-title">为多语言而生</h3>
+        <h3 class="section-title">{{ t('index.i18n.title') }}</h3>
         <p class="section-text">
-          支持简体中文 · 繁体中文（港台）· English
-          <br />
-          UI 用于为地区习惯优化，而非机械翻译
+          <i18next :translation="t('index.i18n.text')">
+            <template #br><br /></template>
+          </i18next>
         </p>
       </div>
     </section>
@@ -196,9 +200,9 @@ function scrollToTop() {
     <!-- 结尾 CTA -->
     <section class="section section-dark center">
       <div class="fade-up">
-        <h3 class="section-title">让新标签页，回归简洁</h3>
+        <h3 class="section-title">{{ t('index.ctaTitle') }}</h3>
         <el-button round size="large" type="primary" dark class="btn" @click="scrollToTop">
-          立即安装
+          {{ t('index.installBtn') }}
         </el-button>
       </div>
     </section>
