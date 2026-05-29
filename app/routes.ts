@@ -29,7 +29,7 @@ export const routes: RouteRecordRaw[] = [
     ],
   },
   // /zh/* → /zh-CN/*
-  { path: '/zh', redirect: `/${DEFAULT_LANG}` },
+  { path: '/zh', redirect: `/${DEFAULT_LANG}/` },
   { path: '/zh/:rest(.*)', redirect: (to) => `/${DEFAULT_LANG}/${to.params.rest}` },
   // 404
   {

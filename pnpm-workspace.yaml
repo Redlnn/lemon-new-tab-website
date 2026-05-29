@@ -1,0 +1,9 @@
+overrides:
+  glob: '^13.0.6'
+  sass: 'npm:sass-embedded@^1.100.0'
+
+peerDependencyRules:
+  ignoreMissing:
+    - eslint
+  allowAny:
+    - eslint

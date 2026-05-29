@@ -112,7 +112,13 @@ function scrollToTop() {
           </i18next>
         </p>
         <client-only>
-          <el-dropdown :key="currentLang" size="large" type="primary" class="hero-btn" popper-class="hero-btn-popper">
+          <el-dropdown
+            :key="currentLang"
+            size="large"
+            type="primary"
+            class="hero-btn"
+            popper-class="hero-btn-popper"
+          >
             <el-button round size="large" type="primary" dark class="btn" @click="installAuto">
               {{ t('index.installBtn') }}
               <el-icon class="el-icon--right"><caret-down24-filled /></el-icon>
@@ -250,7 +256,15 @@ function scrollToTop() {
     <section class="section section-dark center">
       <div class="fade-up">
         <h3 class="section-title">{{ t('index.ctaTitle') }}</h3>
-        <el-button :key="currentLang" round size="large" type="primary" dark class="btn" @click="scrollToTop">
+        <el-button
+          :key="currentLang"
+          round
+          size="large"
+          type="primary"
+          dark
+          class="btn"
+          @click="scrollToTop"
+        >
           {{ t('index.installBtn') }}
         </el-button>
       </div>

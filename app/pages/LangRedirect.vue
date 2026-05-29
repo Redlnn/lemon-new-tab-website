@@ -24,7 +24,10 @@ function detectLang(): string {
 
 // 静态 HTML 降级：meta refresh 重定向到默认语言
 useHead({
-  meta: [{ 'http-equiv': 'refresh', content: `0; url=/${DEFAULT_LANG}/` }],
+  meta: [
+    { name: 'robots', content: 'noindex,follow' },
+    { 'http-equiv': 'refresh', content: `0; url=/${DEFAULT_LANG}/` },
+  ],
   link: SUPPORTED_LANGS.map((lang) => ({
     rel: 'alternate',
     hreflang: lang,

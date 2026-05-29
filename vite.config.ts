@@ -6,9 +6,8 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import Markdown from 'unplugin-vue-markdown/vite'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import i18nextLoader from 'vite-plugin-i18next-loader'
-import Sitemap from 'vite-plugin-sitemap'
 import type { ViteSSGOptions } from 'vite-ssg'
 import svgLoader from 'vite-svg-loader'
 
@@ -26,6 +25,53 @@ const elementPlusResolver = ElementPlusResolver({
 const hostname = process.env.VITE_HOSTNAME || 'https://lemon.redlnn.top'
 
 const routes = ['/zh-CN/', '/zh-CN/tos', '/zh-CN/privacy', '/en/', '/en/tos', '/en/privacy']
+
+function escapeXml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;')
+}
+
+function seoFilesPlugin(): Plugin {
+  return {
+    name: 'seo-files',
+    apply: 'build',
+    generateBundle() {
+      const lastmod = new Date().toISOString()
+      const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${routes
+  .map(
+    (route) => `  <url>
+    <loc>${escapeXml(`${hostname}${route}`)}</loc>
+    <lastmod>${lastmod}</lastmod>
+  </url>`,
+  )
+  .join('\n')}
+</urlset>
+`
+
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source: sitemap,
+      })
+
+      this.emitFile({
+        type: 'asset',
+        fileName: 'robots.txt',
+        source: `User-agent: *
+Allow: /
+
+Sitemap: ${hostname}/sitemap.xml
+`,
+      })
+    },
+  }
+}
 
 export default defineConfig({
   plugins: [
@@ -57,10 +103,7 @@ export default defineConfig({
       resolvers: [elementPlusResolver],
       dts: 'app/types/components.d.ts',
     }),
-    Sitemap({
-      hostname,
-      dynamicRoutes: routes,
-    }),
+    seoFilesPlugin(),
   ],
   resolve: {
     alias: {

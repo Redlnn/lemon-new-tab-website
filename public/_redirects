@@ -1,0 +1,9 @@
+/ /zh-CN/ 301
+/zh /zh-CN/ 301
+/zh/* /zh-CN/:splat 301
+/zh-CN /zh-CN/ 301
+/en /en/ 301
+/zh-CN/tos/ /zh-CN/tos 301
+/zh-CN/privacy/ /zh-CN/privacy 301
+/en/tos/ /en/tos 301
+/en/privacy/ /en/privacy 301
