@@ -19,7 +19,7 @@ html {
   &[lang^='zh-Hans'],
   &[lang^='zh-CN'],
   &[lang^='zh-SG'] {
-    --el-font-family:
+    --font-family:
       #{$font-apple}, 'HarmonyOS Sans SC', #{$font-common}, #{$font-sc}, #{$font-fallback};
   }
 
@@ -28,14 +28,14 @@ html {
   &[lang^='zh-HK'],
   &[lang^='zh-Hant-MO'],
   &[lang^='zh-MO'] {
-    --el-font-family:
+    --font-family:
       #{$font-apple}, 'HarmonyOS Sans TC', #{$font-common}, #{$font-hk}, #{$font-fallback};
   }
 
   /* 台湾正体 */
   &[lang^='zh-Hant']:not([lang^='zh-Hant-HK'], [lang^='zh-Hant-MO']),
   &[lang^='zh-TW'] {
-    --el-font-family:
+    --font-family:
       #{$font-apple}, 'HarmonyOS Sans TC', #{$font-common}, #{$font-tc}, #{$font-fallback};
   }
 }

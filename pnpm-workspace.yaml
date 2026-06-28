@@ -1,6 +1,11 @@
+allowBuilds:
+  esbuild: true
+
 overrides:
   glob: '^13.0.6'
   sass: 'npm:sass-embedded@^1.100.0'
+  markdown-it: 'npm:markdown-exit@latest' # 替换为高性能实现
+  markdown-exit: 'latest' # 替换为高性能实现
 
 peerDependencyRules:
   ignoreMissing:

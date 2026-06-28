@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { SUPPORTED_LANGS } from '@/routes'
 
 const HOSTNAME = (import.meta.env.VITE_HOSTNAME as string | undefined) || 'https://lemon.redlnn.top'
+const DEFAULT_HREFLANG = 'en'
 
 function getCanonicalPath(lang: string, path: string) {
   const pagePath = path.replace(`/${lang}`, '') || '/'
@@ -42,8 +43,8 @@ export function useI18nHead() {
       hreflang: 'x-default',
       href: `${HOSTNAME}${
         pagePath.value === '/'
-          ? `/${SUPPORTED_LANGS[0]}/`
-          : `/${SUPPORTED_LANGS[0]}${pagePath.value}`
+          ? `/${DEFAULT_HREFLANG}/`
+          : `/${DEFAULT_HREFLANG}${pagePath.value}`
       }`,
     },
   ])

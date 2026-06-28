@@ -1,43 +1,26 @@
 <script setup lang="ts">
-import { useWindowSize } from '@vueuse/core'
-
 import { useRoute } from 'vue-router'
 
-import ClientOnly from '@/components/ClientOnly.vue'
 import GlobalNav from '@/components/GlobalNav.vue'
 
 const route = useRoute()
-const { height } = useWindowSize()
 const showNavBg = ref(false)
 
-function handleScroll({ scrollTop }: { scrollTop: number }) {
-  showNavBg.value = scrollTop > (route.path === '/' ? height.value : 0)
+function handleScroll() {
+  showNavBg.value = window.scrollY > (route.path.endsWith('/') ? 24 : 0)
 }
+
+onMounted(() => {
+  handleScroll()
+  window.addEventListener('scroll', handleScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
   <global-nav :showBg="showNavBg" />
-  <div class="main-container">
-    <el-scrollbar ref="scrollbar" @scroll="handleScroll">
-      <router-view />
-    </el-scrollbar>
-    <client-only>
-      <el-backtop target=".main-container .el-scrollbar__wrap"></el-backtop>
-    </client-only>
-  </div>
+  <router-view />
 </template>
-
-<style lang="css">
-.main-container {
-  height: 100dvh;
-}
-
-.main-container > .el-scrollbar > .el-scrollbar__wrap {
-  padding-top: 65px;
-
-  &:has(.landing),
-  &:has(.not-found) {
-    padding-top: 0;
-  }
-}
-</style>

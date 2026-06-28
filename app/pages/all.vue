@@ -10,33 +10,57 @@ useHead({ title: computed(() => t('title.notfound')) })
 </script>
 
 <template>
-  <main class="not-found flex items-center justify-center flex-col h-[100dvh]">
-    <h1 class="text-9xl font-black">404</h1>
-    <h2 class="text-2xl font-bold mt-6">{{ t('notFound.title') }}</h2>
-    <el-button class="back shadow" round size="large" type="primary" @click="router.back()">
+  <main class="not-found">
+    <p class="not-found__code">404</p>
+    <h1>{{ t('notFound.title') }}</h1>
+    <button class="not-found__back" type="button" @click="router.back()">
       {{ t('notFound.back') }}
-    </el-button>
+    </button>
   </main>
 </template>
 
-<style lang="css" scoped>
-h1 {
-  color: var(--el-color-primary);
+<style scoped>
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: 80px 24px;
+  text-align: center;
 }
-.back.el-button--large.is-round {
-  font-weight: 600;
-  font-size: 18px;
-  height: 50px;
-  padding: 0 30px;
-  margin-top: 30px;
-  border-radius: 25px;
-  color: var(--el-color-black);
-  transition:
-    transform var(--el-transition-duration-fast) ease,
-    background-color var(--el-transition-duration) ease;
 
-  &:hover {
-    transform: scale(1.05);
-  }
+.not-found__code {
+  margin: 0;
+  font-size: clamp(72px, 18vw, 180px);
+  font-weight: 760;
+  line-height: 0.85;
+  color: var(--color-accent);
+}
+
+.not-found h1 {
+  margin: 28px 0 0;
+  font-size: clamp(22px, 4vw, 34px);
+  line-height: 1.2;
+}
+
+.not-found__back {
+  min-height: 44px;
+  padding: 0 18px;
+  margin-top: 28px;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+  background: var(--color-accent);
+  border: 1px solid color-mix(in srgb, var(--color-accent-strong) 34%, transparent);
+  border-radius: var(--radius-sm);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.not-found__back:hover {
+  box-shadow: 0 10px 26px rgb(245 184 0 / 0.22);
+  transform: translateY(-1px);
 }
 </style>

@@ -3,7 +3,6 @@ import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import Vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import Markdown from 'unplugin-vue-markdown/vite'
 import { defineConfig, type Plugin } from 'vite'
@@ -16,10 +15,6 @@ declare module 'vite' {
     ssgOptions?: Partial<ViteSSGOptions>
   }
 }
-
-const elementPlusResolver = ElementPlusResolver({
-  importStyle: 'sass',
-})
 
 // 站点域名，可通过环境变量 VITE_HOSTNAME 覆盖
 const hostname = process.env.VITE_HOSTNAME || 'https://lemon.redlnn.top'
@@ -95,12 +90,10 @@ export default defineConfig({
         /\.vue\.[tj]sx?\?vue/, // .vue (vue-loader with experimentalInlineMatchResource enabled)
       ],
       imports: ['vue'],
-      resolvers: [elementPlusResolver],
       viteOptimizeDeps: true,
       dts: 'app/types/auto-imports.d.ts',
     }),
     Components({
-      resolvers: [elementPlusResolver],
       dts: 'app/types/components.d.ts',
     }),
     seoFilesPlugin(),
@@ -115,15 +108,5 @@ export default defineConfig({
     includedRoutes: () => ['/', ...routes],
     // i18next 是单例，并发渲染会导致多页面语言冲突，必须串行
     concurrency: 1,
-  },
-  ssr: {
-    noExternal: ['element-plus'],
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@use "@/assets/styles/element/index.scss" as *;`,
-      },
-    },
   },
 })

@@ -10,7 +10,16 @@ import { useI18nHead } from '@/composables/useI18nHead'
 const { t } = useTranslation()
 const route = useRoute()
 
-useHead({ title: computed(() => t('title.tos')) })
+useHead({
+  title: computed(() => t('title.tos')),
+  meta: computed(() => [
+    { name: 'description', content: t('seo.tosDescription') },
+    { name: 'robots', content: 'index,follow' },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:title', content: t('title.tos') },
+    { property: 'og:description', content: t('seo.tosDescription') },
+  ]),
+})
 useI18nHead()
 
 const TOS = computed(() =>
@@ -21,7 +30,9 @@ const TOS = computed(() =>
 </script>
 
 <template>
-  <section class="md-container">
-    <TOS />
-  </section>
+  <main class="legal-page">
+    <section class="md-container markdown-body">
+      <TOS />
+    </section>
+  </main>
 </template>

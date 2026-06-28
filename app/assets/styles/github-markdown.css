@@ -10,31 +10,32 @@
 }
 
 html.dark .markdown-body {
-  --focus-outlineColor: #1f6feb;
-  --fgColor-muted: #9198a1;
-  --fgColor-accent: #4493f8;
-  --bgColor-muted: #151b23;
+  --focus-outlineColor: var(--color-accent);
+  --fgColor-muted: var(--color-text-muted);
+  --fgColor-accent: var(--color-accent-strong);
+  --bgColor-muted: var(--color-bg-soft);
   --bgColor-neutral-muted: #656c7633;
   --bgColor-attention-muted: #bb800926;
-  --borderColor-muted: #3d444db3;
-  --borderColor-neutral-muted: #3d444db3;
+  --borderColor-muted: var(--color-border);
+  --borderColor-neutral-muted: var(--color-border);
 }
 
 .markdown-body {
-  --focus-outlineColor: #0969da;
-  --fgColor-muted: #59636e;
-  --fgColor-accent: #0969da;
-  --bgColor-muted: #f6f8fa;
+  --focus-outlineColor: var(--color-accent);
+  --fgColor-muted: var(--color-text-muted);
+  --fgColor-accent: var(--color-accent-strong);
+  --bgColor-muted: var(--color-bg-soft);
   --bgColor-neutral-muted: #818b981f;
   --bgColor-attention-muted: #fff8c5;
-  --borderColor-muted: #d1d9e0b3;
-  --borderColor-neutral-muted: #d1d9e0b3;
+  --borderColor-muted: var(--color-border);
+  --borderColor-neutral-muted: var(--color-border);
 }
 
 .markdown-body {
   padding-top: 1.3rem;
-  color: var(--el-text-color-primary);
-  line-height: 1.5;
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.7;
   overflow-wrap: break-word;
 }
 
@@ -69,15 +70,16 @@ html.dark .markdown-body {
 }
 
 .markdown-body h1 {
-  margin: 0.67em 0;
-  font-weight: var(--base-text-weight-semibold, 600);
+  margin: 0 0 0.67em;
+  font-weight: 720;
   padding-bottom: 0.3em;
-  font-size: 2em;
+  font-size: clamp(34px, 6vw, 56px);
+  letter-spacing: 0;
 }
 
 .markdown-body mark {
   background-color: var(--bgColor-attention-muted);
-  color: var(--el-text-color-primary);
+  color: var(--color-text);
 }
 
 .markdown-body small {
@@ -122,7 +124,7 @@ html.dark .markdown-body {
   height: 0.25em;
   padding: 0;
   margin: var(--base-size-24) 0;
-  background-color: var(--el-text-color-placeholder);
+  background-color: var(--color-border-strong);
   border: 0;
 }
 
@@ -237,7 +239,7 @@ html.dark .markdown-body {
       monospace
     );
   line-height: 10px;
-  color: var(--el-text-color-primary);
+  color: var(--color-text);
   vertical-align: middle;
   background-color: var(--bgColor-muted);
   border: solid 1px var(--borderColor-neutral-muted);
@@ -294,7 +296,7 @@ html.dark .markdown-body {
   margin: 0;
   padding: 0 1em;
   color: var(--fgColor-muted);
-  border-left: 0.25em solid var(--el-text-color-placeholder);
+  border-left: 0.25em solid var(--color-border-strong);
 }
 
 .markdown-body ul,
@@ -302,6 +304,22 @@ html.dark .markdown-body {
   margin-top: 0;
   margin-bottom: 0;
   padding-left: 2em;
+}
+
+.markdown-body ul {
+  list-style-type: disc;
+}
+
+.markdown-body ol {
+  list-style-type: decimal;
+}
+
+.markdown-body ul ul {
+  list-style-type: circle;
+}
+
+.markdown-body ul ul ul {
+  list-style-type: square;
 }
 
 .markdown-body ol ol,
@@ -533,7 +551,7 @@ html.dark .markdown-body {
 .markdown-body table th,
 .markdown-body table td {
   padding: 6px 13px;
-  border: 1px solid var(--el-text-color-placeholder);
+  border: 1px solid var(--color-border);
 }
 
 .markdown-body table td > :last-child {
@@ -573,7 +591,7 @@ html.dark .markdown-body {
   padding: 7px;
   margin: 13px 0 0;
   overflow: hidden;
-  border: 1px solid var(--el-text-color-placeholder);
+  border: 1px solid var(--color-border);
 }
 
 .markdown-body span.frame span img {
@@ -585,7 +603,7 @@ html.dark .markdown-body {
   display: block;
   padding: 5px 0 0;
   clear: both;
-  color: var(--el-text-color-primary);
+  color: var(--color-text);
 }
 
 .markdown-body span.align-center {
@@ -690,7 +708,7 @@ html.dark .markdown-body {
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  color: var(--el-text-color-primary);
+  color: var(--color-text);
   background-color: var(--bgColor-muted);
   border-radius: 6px;
 }

@@ -1,526 +1,728 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { Chrome, Edge, FirefoxBrowser, Github } from '@vicons/fa'
-import { CaretDown24Filled } from '@vicons/fluent'
 import { useTranslation } from 'i18next-vue'
+import { A11y, Keyboard, Navigation } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/vue'
 import { useRoute } from 'vue-router'
+import 'swiper/css'
+import 'swiper/css/navigation'
 
-import ClientOnly from '@/components/ClientOnly.vue'
 import { useI18nHead } from '@/composables/useI18nHead'
-import { useScrollMotion } from '@/composables/useScrollMotion'
 
-const { t } = useTranslation()
 const route = useRoute()
-const currentLang = computed(() => route.params.lang as string)
+const currentLang = computed(() => route.params.lang as 'zh-CN' | 'en')
+const { t } = useTranslation()
+const swiperModules = [Navigation, Keyboard, A11y]
 
-useHead({ title: computed(() => t('title.index')) })
-useI18nHead()
+interface HomeFeature {
+  title: string
+  text: string
+}
 
-const mainRef = useTemplateRef('mainRef')
+interface HomeScreenshot {
+  label: string
+  src: string
+}
 
-useScrollMotion(mainRef, {
-  selector: '.fade-up',
+const homeFeatureRows = computed(
+  () => t('home.featureRows', { returnObjects: true }) as HomeFeature[],
+)
+const homeScreenshots = computed(
+  () => t('home.screenshots', { returnObjects: true }) as HomeScreenshot[],
+)
+
+const storeLinks = [
+  {
+    key: 'chrome',
+    label: 'Chrome Web Store',
+    href: 'https://chromewebstore.google.com/detail/bhbpmpflnpnkjanfgbjjhldccbckjohb',
+  },
+  {
+    key: 'edge',
+    label: 'Microsoft Edge Add-ons',
+    href: 'https://microsoftedge.microsoft.com/addons/detail/keikkgfgidagjlicckkangkfgnbdjdnh',
+  },
+  {
+    key: 'firefox',
+    label: 'Firefox Add-ons',
+    href: 'https://addons.mozilla.org/firefox/addon/lemon-new-tab/',
+  },
+  {
+    key: 'github',
+    label: 'GitHub Releases',
+    href: 'https://github.com/Redlnn/lemon-new-tab-page/releases/latest',
+  },
+] as const
+
+const jsonLd = computed(() =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Lemon New Tab',
+    alternateName: '柠檬起始页',
+    applicationCategory: 'BrowserApplication',
+    operatingSystem: 'Chrome, Microsoft Edge, Firefox',
+    description: t('home.description'),
+    url: `https://lemon.redlnn.top/${currentLang.value}/`,
+    softwareHelp: `https://lemon.redlnn.top/${currentLang.value}/privacy`,
+    license: 'https://www.gnu.org/licenses/agpl-3.0.html',
+    codeRepository: 'https://github.com/Redlnn/lemon-new-tab-page',
+  }),
+)
+
+useHead({
+  title: computed(() => t('title.index')),
+  meta: computed(() => [
+    { name: 'description', content: t('home.description') },
+    { name: 'robots', content: 'index,follow,max-image-preview:large' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: t('title.index') },
+    { property: 'og:description', content: t('home.description') },
+    { property: 'og:image', content: 'https://lemon.redlnn.top/preview-home.webp' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+  ]),
+  script: computed(() => [
+    {
+      type: 'application/ld+json',
+      innerHTML: jsonLd.value,
+    },
+  ]),
 })
-
-const storeUrlMap = {
-  chrome: 'https://chromewebstore.google.com/detail/bhbpmpflnpnkjanfgbjjhldccbckjohb',
-  edge: 'https://microsoftedge.microsoft.com/addons/detail/keikkgfgidagjlicckkangkfgnbdjdnh',
-  firefox: 'https://addons.mozilla.org/firefox/addon/lemon-new-tab/',
-  github: 'https://github.com/Redlnn/lemon-new-tab-page/releases/latest',
-} as const
-
-type StoreBrowser = keyof typeof storeUrlMap // "chrome" | "edge" | "firefox" | "github"
-
-function detectBrowser() {
-  const ua = navigator.userAgent.toLowerCase()
-
-  // iOS
-  if (
-    /ipad|iphone|ipod/.test(ua) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-  ) {
-    return 'iOS'
-  }
-
-  // Harmony
-  if (/OpenHarmony/i.test(ua)) {
-    return 'HarmonyOS Next'
-  }
-
-  // Android
-  if (/Android/.test(ua)) {
-    return 'Android'
-  }
-
-  // Firefox 先判断（它不属于 chromium）
-  if (ua.includes('firefox')) return 'firefox'
-
-  // Chromium 系（现代方式）
-  if (navigator.userAgentData?.brands) {
-    const brands = navigator.userAgentData.brands.map((b) => b.brand.toLowerCase())
-
-    if (brands.some((b) => b.includes('edge'))) return 'edge'
-    if (brands.some((b) => b.includes('chrome'))) return 'chrome'
-    if (brands.some((b) => b.includes('chromium'))) return 'chromium'
-  }
-
-  // 回退 UA 方案
-  if (ua.includes('edg/')) return 'edge'
-  if (ua.includes('chrome/')) return 'chrome'
-
-  return 'other'
-}
-
-function installAuto() {
-  const browser = detectBrowser()
-  console.log(browser)
-  if (['iOS', 'Android', 'HarmonyOS Next'].includes(browser)) {
-    ElMessageBox.confirm(t('index.mobileWarning'), t('index.mobileWarningTitle'), {
-      type: 'warning',
-    }).then(() => install('github'))
-    return
-  }
-  install(browser as StoreBrowser)
-}
-
-function install(browser: StoreBrowser) {
-  const url = storeUrlMap[browser] ?? storeUrlMap.chrome
-  window.open(url, '_blank')
-}
-
-function scrollToTop() {
-  window.scrollTo(0, 0)
-}
+useI18nHead()
 </script>
 
 <template>
-  <main ref="mainRef" class="landing">
-    <section class="section section-full gradient-hero">
-      <div class="container hero fade-up">
-        <h2 class="hero-title">
-          <span class="name">{{ t('index.heroName') }}</span>
-          <span>{{ t('index.heroTagline') }}</span>
-        </h2>
-        <h2 class="hero-title">
-          <i18next :translation="t('index.heroTitle')">
-            <template #br><br /></template>
-          </i18next>
-        </h2>
-        <p class="hero-subtitle">
-          <i18next :translation="t('index.heroSubtitle')">
-            <template #br><br /></template>
-          </i18next>
-        </p>
-        <client-only>
-          <el-dropdown
-            :key="currentLang"
-            size="large"
-            type="primary"
-            class="hero-btn"
-            popper-class="hero-btn-popper"
+  <main class="home">
+    <section class="hero">
+      <div class="hero__copy">
+        <h1>{{ t('home.title') }}</h1>
+        <p class="hero__lead">{{ t('home.lead') }}</p>
+        <p class="hero__intro">{{ t('home.intro') }}</p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#install">{{ t('home.primaryCta') }}</a>
+          <a
+            class="button button--ghost"
+            href="https://github.com/Redlnn/lemon-new-tab-page"
+            target="_blank"
+            rel="noreferrer"
           >
-            <el-button round size="large" type="primary" dark class="btn" @click="installAuto">
-              {{ t('index.installBtn') }}
-              <el-icon class="el-icon--right"><caret-down24-filled /></el-icon>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item>
-                  <a
-                    :href="storeUrlMap.chrome"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="store-link"
-                  >
-                    <el-icon><Chrome /></el-icon>
-                    Chrome
-                  </a>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <a
-                    :href="storeUrlMap.edge"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="store-link"
-                  >
-                    <el-icon><Edge /></el-icon>
-                    Microsoft Edge
-                  </a>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <a
-                    :href="storeUrlMap.firefox"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="store-link"
-                  >
-                    <el-icon><FirefoxBrowser /></el-icon>
-                    Firefox
-                  </a>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <a
-                    :href="storeUrlMap.github"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="store-link"
-                  >
-                    <el-icon><Github /></el-icon>
-                    GitHub
-                  </a>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-          <template #placeholder>
-            <a
-              :href="storeUrlMap.chrome"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="el-button el-button--primary el-button--large is-round btn hero-btn"
-            >
-              {{ t('index.installBtn') }}
-            </a>
-          </template>
-        </client-only>
-        <div class="hero-compatibility">Chrome / Edge 116+ | Firefox 128+</div>
-      </div>
-    </section>
-
-    <!-- 屏 1 — 速度 -->
-    <section class="section section-light">
-      <div class="container grid-2 fade-up">
-        <div>
-          <h3 class="section-title">{{ t('index.speed.title') }}</h3>
-          <p class="section-text">{{ t('index.speed.text') }}</p>
+            {{ t('home.secondaryCta') }}
+          </a>
         </div>
-        <img src="/1.webp" class="media-card" :alt="t('index.speed.title')" />
+        <p class="hero__support">{{ t('home.support') }}</p>
       </div>
+
+      <figure class="product-preview">
+        <img src="/preview-home.webp" :alt="t('home.previewAlt')" />
+      </figure>
     </section>
 
-    <!-- 屏 2 — 最常访问 -->
-    <section class="section section-dark">
-      <div class="container grid-2 fade-up">
-        <img src="/2.webp" class="media-card" :alt="t('index.favorites.title')" />
-        <div>
-          <h3 class="section-title">{{ t('index.favorites.title') }}</h3>
-          <p class="section-text">{{ t('index.favorites.text') }}</p>
-        </div>
+    <section id="features" class="section features" aria-labelledby="features-title">
+      <div class="section__heading">
+        <h2 id="features-title">{{ t('home.featuresTitle') }}</h2>
+        <p>{{ t('home.featuresIntro') }}</p>
       </div>
-    </section>
-
-    <!-- 屏 3 — 壁纸能力 -->
-    <section class="section gradient-soft">
-      <div class="container center narrow fade-up">
-        <h3 class="section-title">{{ t('index.themes.title') }}</h3>
-        <p class="section-text">{{ t('index.themes.text') }}</p>
-        <img src="/3.webp" class="media-card large" :alt="t('index.themes.title')" />
-      </div>
-    </section>
-
-    <!-- 屏 4 — 动态主题（莫奈取色） -->
-    <section class="section section-light">
-      <div class="container grid-2 fade-up">
-        <div>
-          <h3 class="section-title">{{ t('index.monet.title') }}</h3>
-          <p class="section-text">
-            <i18next :translation="t('index.monet.text')">
-              <template #sup1><sup>1</sup></template>
-              <template #sup2><sup>2</sup></template>
-            </i18next>
-          </p>
-        </div>
-        <img src="/4.webp" class="media-card" :alt="t('index.monet.title')" />
-        <div class="session-note">
-          <ol>
-            <li>{{ t('index.monet.note1') }}</li>
-            <li>{{ t('index.monet.note2') }}</li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- 屏 5 — 国际化 -->
-    <section class="section section-muted">
-      <div class="container center narrow fade-up">
-        <h3 class="section-title">{{ t('index.i18n.title') }}</h3>
-        <p class="section-text">
-          <i18next :translation="t('index.i18n.text')">
-            <template #br><br /></template>
-          </i18next>
-        </p>
-      </div>
-    </section>
-
-    <!-- 结尾 CTA -->
-    <section class="section section-dark center">
-      <div class="fade-up">
-        <h3 class="section-title">{{ t('index.ctaTitle') }}</h3>
-        <el-button
-          :key="currentLang"
-          round
-          size="large"
-          type="primary"
-          dark
-          class="btn"
-          @click="scrollToTop"
+      <div class="feature-list">
+        <article
+          v-for="(feature, index) in homeFeatureRows"
+          :key="feature.title"
+          class="feature-row"
         >
-          {{ t('index.installBtn') }}
-        </el-button>
+          <span class="feature-row__index">{{ String(index + 1).padStart(2, '0') }}</span>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.text }}</p>
+        </article>
       </div>
     </section>
+
+    <section class="section screenshots" aria-labelledby="screenshots-title">
+      <div class="section__heading section__heading--compact">
+        <h2 id="screenshots-title">{{ t('home.screenshotsTitle') }}</h2>
+      </div>
+      <Swiper
+        class="screenshot-carousel"
+        :modules="swiperModules"
+        :slides-per-view="'auto'"
+        :space-between="32"
+        :navigation="{
+          prevEl: '.screenshot-carousel__prev',
+          nextEl: '.screenshot-carousel__next',
+        }"
+        :watch-overflow="true"
+        autoplay
+        :a11y="{ enabled: true }"
+      >
+        <SwiperSlide
+          v-for="screenshot in homeScreenshots"
+          :key="screenshot.src"
+          class="screenshot-slide"
+        >
+          <figure class="screenshot-item">
+            <img :src="screenshot.src" :alt="screenshot.label" loading="lazy" />
+            <figcaption>{{ screenshot.label }}</figcaption>
+          </figure>
+        </SwiperSlide>
+        <button
+          class="screenshot-carousel__nav screenshot-carousel__prev swiper-button-prev"
+          type="button"
+          :aria-label="t('home.previousScreenshot')"
+        />
+        <button
+          class="screenshot-carousel__nav screenshot-carousel__next swiper-button-next"
+          type="button"
+          :aria-label="t('home.nextScreenshot')"
+        />
+      </Swiper>
+    </section>
+
+    <section class="section privacy-note" aria-labelledby="privacy-title">
+      <div>
+        <h2 id="privacy-title">{{ t('home.privacyTitle') }}</h2>
+        <p>{{ t('home.privacyText') }}</p>
+      </div>
+      <div class="privacy-note__links">
+        <RouterLink class="text-link" :to="`/${currentLang}/privacy`">
+          {{ t('home.privacyLink') }}
+        </RouterLink>
+        <RouterLink class="text-link" :to="`/${currentLang}/tos`">
+          {{ t('home.termsLink') }}
+        </RouterLink>
+      </div>
+    </section>
+
+    <section id="install" class="section install" aria-labelledby="install-title">
+      <div class="section__heading">
+        <h2 id="install-title">{{ t('home.installTitle') }}</h2>
+        <p>{{ t('home.installText') }}</p>
+      </div>
+      <div class="store-list">
+        <a
+          v-for="item in storeLinks"
+          :key="item.key"
+          :href="item.href"
+          target="_blank"
+          rel="noreferrer"
+          class="store-link"
+        >
+          <span>{{ item.label }}</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 17 17 7m0 0H8m9 0v9" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>{{ t('home.footerNote') }}</span>
+      <div>
+        <RouterLink :to="`/${currentLang}/privacy`">{{ t('home.privacyLink') }}</RouterLink>
+        <RouterLink :to="`/${currentLang}/tos`">{{ t('home.termsLink') }}</RouterLink>
+        <a href="https://github.com/Redlnn/lemon-new-tab-page" target="_blank" rel="noreferrer">
+          GitHub
+        </a>
+      </div>
+    </footer>
   </main>
 </template>
 
-<style lang="scss">
-.landing {
-  --bg: var(--el-bg-color);
-  --bg-soft: var(--el-bg-color-page);
-  --bg-dark: var(--el-color-black);
-
-  html.dark & {
-    --bg: var(--el-bg-color-page);
-    --bg-soft: var(--el-bg-color);
-  }
+<style scoped>
+.home {
+  overflow: clip;
 }
 
-/* 动画 */
-.fade-up {
-  opacity: 0;
-  transition: none;
-  transform: translateY(0);
-}
-
-.fade-up.from-bottom {
-  transform: translateY(20px);
-}
-
-.fade-up.from-top {
-  transform: translateY(-20px);
-}
-
-.fade-up.show {
-  opacity: 1;
-  transform: translateY(0);
-  transition:
-    transform 0.8s ease,
-    opacity 0.8s ease;
-}
-
-/* Layout */
-.section {
-  padding: 150px 10dvw;
-
-  &.center {
-    text-align: center;
-  }
-}
-
-.section-full {
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.container {
-  max-width: 1100px;
+.hero,
+.section,
+.site-footer {
+  width: min(calc(100% - var(--page-inline) * 2), var(--content-width));
   margin: 0 auto;
-
-  &.center {
-    text-align: center;
-  }
-}
-
-.grid-2 {
-  display: grid;
-  gap: 30px 48px;
-  align-items: center;
-
-  @media (width >= 800px) {
-    & {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
 }
 
 .hero {
-  text-align: center;
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(540px, 1.3fr);
+  gap: clamp(36px, 4.5vw, 84px);
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 118px 0 76px;
 }
 
-.hero-title {
-  font-size: clamp(48px, 5vw, 64px);
-  font-weight: 700;
-  margin-bottom: 24px;
-  line-height: 1.2em;
-
-  .name {
-    color: var(--el-color-primary);
-    letter-spacing: initial;
-  }
+.hero__copy {
+  max-width: 550px;
 }
 
-.hero-subtitle {
-  font-size: 20px;
-  color: var(--el-text-color-regular);
-  margin-bottom: 40px;
+.hero h1 {
+  margin: 0;
+  font-size: clamp(42px, 5.5vw, 68px);
+  font-weight: 720;
+  line-height: 1.04;
 }
 
-.hero-compatibility {
-  margin-top: 1em;
-  color: var(--el-text-color-placeholder);
-  font-size: var(--el-font-size-extra-small);
+.hero__lead {
+  margin: 28px 0 0;
+  font-size: clamp(22px, 2.35vw, 30px);
+  font-weight: 610;
+  line-height: 1.24;
 }
 
-.section-title {
-  font-size: clamp(36px, 4vw, 48px);
-  font-weight: bolder;
-  margin-bottom: 8px;
-
-  &.xl {
-    font-size: 56px;
-    line-height: 1.25;
-    margin-bottom: 30px;
-  }
-}
-
-.section-text {
+.hero__intro {
+  max-width: 520px;
+  margin: 18px 0 0;
   font-size: 17px;
-  line-height: 1.7;
-  color: var(--el-text-color-regular);
-
-  .section-dark & {
-    color: var(--el-text-color-secondary);
-  }
-
-  .container:not(.grid-2) & {
-    margin-bottom: 30px;
-  }
+  line-height: 1.75;
+  color: var(--color-text-muted);
 }
 
-.session-note {
-  height: 0;
-
-  li {
-    font-size: var(--el-font-size-extra-small);
-    color: var(--el-text-color-regular);
-  }
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
 }
 
-.section-light {
-  background: var(--bg);
-}
-
-.section-dark {
-  background: var(--bg-dark);
-  color: var(--el-bg-color);
-
-  html.dark & {
-    color: inherit;
-  }
-}
-
-.section-muted {
-  background: var(--bg-soft);
-}
-
-.gradient-hero {
-  background: linear-gradient(to bottom, var(--el-color-primary-light-8), var(--el-bg-color));
-
-  html.dark & {
-    background: linear-gradient(
-      to bottom,
-      var(--el-color-primary-light-9),
-      var(--el-bg-color-page)
-    );
-  }
-}
-
-.gradient-soft {
-  background: linear-gradient(to bottom, var(--bg-soft), var(--bg));
-}
-
-.hero-btn {
-  .btn.el-button--large.is-round {
-    padding: 0 14px 0 30px;
-  }
-
-  .el-icon--right {
-    margin-left: 10px;
-  }
-
-  &.el-dropdown .el-dropdown__caret-button {
-    width: 40px;
-    padding: 0 20px;
-
-    &::before {
-      display: none;
-    }
-  }
-}
-
-.hero-btn-popper.el-popper {
-  --el-popper-border-radius: 15px;
-  --el-dropdown-menuItem-hover-color: var(--el-color-primary);
-  padding: 5px;
-
-  .el-dropdown-menu {
-    padding: 0;
-  }
-
-  .el-dropdown-menu__item {
-    padding: 0;
-    border-radius: 10px;
-  }
-
-  .store-link {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 16px;
-    color: inherit;
-    text-decoration: none;
-    width: 100%;
-    box-sizing: border-box;
-  }
-}
-
-.btn.el-button--large.is-round {
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 18px;
-  height: 50px;
-  padding: 0 30px;
-  border-radius: 25px;
-  color: var(--el-color-black);
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   transition:
-    transform var(--el-transition-duration-fast) ease,
-    background-color var(--el-transition-duration) ease;
-  box-shadow: var(--el-box-shadow-light);
+    transform 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
 
-  &:hover {
-    transform: scale(1.05);
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button--primary {
+  color: #171713;
+  background: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent-strong) 34%, transparent);
+  box-shadow: 0 10px 26px rgb(245 184 0 / 0.22);
+}
+
+.button--ghost {
+  background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+}
+
+.button--ghost:hover {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border-strong);
+}
+
+.hero__support {
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+.product-preview {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.product-preview img,
+.screenshot-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+}
+
+.product-preview img {
+  height: auto;
+  max-height: min(68dvh, 680px);
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lift);
+}
+
+.section {
+  padding: 96px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.section__heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(320px, 1fr);
+  gap: 42px;
+  align-items: end;
+  margin-bottom: 38px;
+}
+
+.section__heading--compact {
+  display: block;
+  max-width: 620px;
+}
+
+.section h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.section__heading p,
+.privacy-note p,
+.site-footer {
+  color: var(--color-text-muted);
+}
+
+.section__heading p,
+.privacy-note p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.features .section__heading,
+.install .section__heading {
+  grid-template-columns: minmax(360px, 0.9fr) minmax(360px, 1fr);
+  align-items: start;
+}
+
+.features .section__heading p,
+.install .section__heading p {
+  justify-self: end;
+  max-width: 720px;
+  text-align: right;
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.feature-row {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 16px;
+  min-height: 238px;
+  padding: 22px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.feature-row:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
+}
+
+.feature-row__index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 28px;
+  font-size: 12px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--color-text) 82%, var(--color-accent));
+  background: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  border-radius: var(--radius-sm);
+}
+
+.feature-row h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 680;
+}
+
+.feature-row p {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.screenshot-carousel {
+  --swiper-theme-color: var(--color-text);
+  --swiper-navigation-size: 40px;
+
+  overflow: visible;
+}
+
+.screenshot-slide {
+  width: min(600px, 38%);
+}
+
+.screenshot-item {
+  position: relative;
+  margin: 0;
+}
+
+.screenshot-item img {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.screenshot-item figcaption {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  vertical-align: middle;
+}
+
+.screenshot-carousel :deep(.swiper-button-prev),
+.screenshot-carousel :deep(.swiper-button-next) {
+  width: var(--swiper-navigation-size);
+  height: var(--swiper-navigation-size);
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  border-radius: 50%;
+  box-shadow: var(--shadow-card);
+  padding: 10px;
+}
+
+.screenshot-carousel :deep(.swiper-button-disabled) {
+  opacity: 0;
+}
+
+.privacy-note {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: center;
+  padding: 46px;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.privacy-note h2 {
+  margin-bottom: 14px;
+  font-size: clamp(24px, 3vw, 36px);
+}
+
+.privacy-note__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.text-link {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--color-text);
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+
+.store-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.store-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 88px;
+  padding: 22px;
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+  border-right: 1px solid var(--color-border);
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.store-link:last-child {
+  border-right: 0;
+}
+
+.store-link:hover {
+  background: var(--color-bg-soft);
+}
+
+.store-link svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 42px 0 56px;
+  font-size: 13px;
+  border-top: 1px solid var(--color-border);
+}
+
+.site-footer div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--color-text);
+}
+
+@media (width <= 980px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 116px;
+    padding-bottom: 64px;
+  }
+
+  .hero__copy {
+    max-width: 720px;
+  }
+
+  .product-preview {
+    min-height: auto;
+  }
+
+  .product-preview img {
+    height: clamp(280px, 42vh, 440px);
+    max-height: none;
+    object-fit: cover;
+  }
+
+  .section__heading,
+  .privacy-note {
+    grid-template-columns: 1fr;
+  }
+
+  .features .section__heading,
+  .install .section__heading {
+    grid-template-columns: 1fr;
+  }
+
+  .features .section__heading p,
+  .install .section__heading p {
+    justify-self: start;
+    margin-top: 0;
+    text-align: left;
+  }
+
+  .feature-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .store-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .store-link:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .store-link:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--color-border);
   }
 }
 
-.media-card {
-  border-radius: 16px;
-  box-shadow:
-    0 20px 25px -5px rgb(0 0 0 / 0.1),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
-  max-width: 100%;
-  margin: auto;
-
-  .large {
-    height: 400px;
+@media (width <= 640px) {
+  .hero,
+  .section,
+  .site-footer {
+    width: min(calc(100% - 40px), var(--content-width));
   }
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .hero h1 {
+    font-size: 46px;
+  }
+
+  .hero {
+    gap: 28px;
+  }
+
+  .section {
+    padding: 72px 0;
+  }
+
+  .feature-row {
+    min-height: 0;
+  }
+
+  .feature-list,
+  .store-list {
+    grid-template-columns: 1fr;
+  }
+
+  .screenshot-carousel {
+    padding-bottom: 38px;
+  }
+
+  .screenshot-slide {
+    width: min(430px, 86%);
+  }
+
+  .screenshot-carousel :deep(.swiper-button-prev),
+  .screenshot-carousel :deep(.swiper-button-next) {
+    display: none;
+  }
+
+  .product-preview img {
+    height: clamp(260px, 44vh, 380px);
+  }
+
+  .store-link,
+  .store-link:nth-child(2n),
+  .store-link:nth-child(-n + 2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .store-link:last-child {
+    border-bottom: 0;
+  }
+
+  .privacy-note {
+    padding: 28px;
+  }
+
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 </style>

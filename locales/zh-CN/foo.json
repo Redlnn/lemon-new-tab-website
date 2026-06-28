@@ -1,46 +1,90 @@
 {
   "title": {
-    "index": "柠檬起始页 - 让新标签页更好用",
+    "index": "柠檬起始页 - 简洁、本地优先的浏览器新标签页",
     "tos": "服务条款 - 柠檬起始页",
     "privacy": "隐私政策 - 柠檬起始页",
     "notfound": "页面未找到 - 柠檬起始页"
   },
+  "seo": {
+    "tosDescription": "查看柠檬起始页的服务条款，了解扩展使用、分发渠道、开源许可、在线功能和责任边界。",
+    "privacyDescription": "查看柠檬起始页的隐私政策，了解扩展数据存储、浏览器权限、联网功能、第三方服务和用户选择。"
+  },
+  "nav": {
+    "primary": "主导航",
+    "features": "功能",
+    "switchLang": "切换语言",
+    "toggleTheme": "切换明暗主题"
+  },
+  "home": {
+    "title": "柠檬起始页",
+    "description": "柠檬起始页是一款本地优先的开源浏览器新标签页扩展，支持搜索、快速导航、书签、壁纸、动态主题、时钟语录与浏览器同步。",
+    "lead": "让新标签页成为你想要的样子",
+    "intro": "无需注册账号，所有数据保存在本地。自定义选项丰富，想怎么样就怎么样。",
+    "primaryCta": "安装扩展",
+    "secondaryCta": "源码",
+    "previewAlt": "柠檬起始页主页预览",
+    "support": "Chrome 116+ · Edge 116+ · Firefox 128+",
+    "featuresTitle": "✨功能",
+    "featuresIntro": "抛弃花里胡哨的工具，把基础功能做好才是好",
+    "featureRows": [
+      {
+        "title": "搜索",
+        "text": "支持 Bing、Google、百度、DuckDuckGo、Yandex、自定义搜索引擎、搜索建议和本地搜索历史。"
+      },
+      {
+        "title": "快速导航",
+        "text": "自动展示最常访问网站，也可以添加、置顶、分组、分页、拖动整理自己的链接。支持 Dock 和 Launchpad 样式。"
+      },
+      {
+        "title": "书签",
+        "text": "直接在新标签页搜索、打开、编辑、删除和拖动整理浏览器书签。"
+      },
+      {
+        "title": "壁纸与主题",
+        "text": "支持 Bing 每日一图、在线图片 API、本地图片、视频壁纸，以及从壁纸提取动态主题色。"
+      },
+      {
+        "title": "时间与文字",
+        "text": "可显示时钟、日期、秒数和农历；每日展示古诗词、语录或自定义文字。"
+      },
+      {
+        "title": "备份与同步",
+        "text": "支持设置导入导出，也可以使用浏览器账号同步。没有独立账号体系。"
+      }
+    ],
+    "screenshotsTitle": "📸截图",
+    "previousScreenshot": "上一张截图",
+    "nextScreenshot": "下一张截图",
+    "screenshots": [
+      {
+        "label": "默认主页",
+        "src": "/preview-home.webp"
+      },
+      {
+        "label": "Dock 与大时钟",
+        "src": "/preview-dock.webp"
+      },
+      {
+        "label": "搜索建议",
+        "src": "/preview-search.webp"
+      },
+      {
+        "label": "设置面板",
+        "src": "/preview-settings.webp"
+      }
+    ],
+    "privacyTitle": "关于数据",
+    "privacyText": "无需注册账号，无需连接服务器，所有扩展数据都保存在你的浏览器里。没有需要登录才能使用的功能，所有联网功能均可关闭。一切按如你所想。",
+    "privacyLink": "阅读隐私政策",
+    "termsLink": "服务条款",
+    "installTitle": "⬇️安装",
+    "installText": "你也可以从 GitHub Release 下载 zip 包。",
+    "footerNote": "个人开源项目，使用 AGPL-3.0 许可。"
+  },
   "tos": "服务条款",
   "privacy": "隐私政策",
-  "index": {
-    "heroName": "柠檬",
-    "heroTagline": "起始页",
-    "heroTitle": "重新定义你的{br}新标签页",
-    "heroSubtitle": "极简 · 开源 · 可定制{br}一个真正「好看且开源」的浏览器起始页",
-    "installBtn": "立即安装",
-    "mobileWarning": "不支持移动设备安装，将跳转到 GitHub",
-    "mobileWarningTitle": "不受支持的设备",
-    "speed": {
-      "title": "快到不像话",
-      "text": "绝大部分功能纯本地 + 缓存，无过多网络负担。打开新标签页，秒速呈现。"
-    },
-    "favorites": {
-      "title": "常用的，自然在眼前",
-      "text": "为你呈现最常访问网站，添加个人常用链接，让每一次开始都更高效、更从容。"
-    },
-    "themes": {
-      "title": "不止一种样子",
-      "text": "根据你的偏好调整布局与视觉风格，让界面以更自然的方式融入你的浏览节奏。"
-    },
-    "monet": {
-      "title": "界面，会呼吸",
-      "text": "基于壁纸的莫奈动态取色系统{sup1}。每一次打开，都是全新的氛围{sup2}。",
-      "note1": "注1：不支持视频壁纸及纯色背景",
-      "note2": "注2：只有使用在线 API 时才会每次打开跟随壁纸切换而改变主题色"
-    },
-    "i18n": {
-      "title": "为多语言而生",
-      "text": "支持简体中文 · 繁体中文（港台）· English{br}UI 针对地区习惯优化，而非机械翻译"
-    },
-    "ctaTitle": "让新标签页，回归简洁"
-  },
   "notFound": {
-    "title": "糟糕……页面不见了",
-    "back": "返回"
+    "title": "页面未找到",
+    "back": "返回上一页"
   }
 }
